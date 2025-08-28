@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect with Seniors - Student Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    
+    .student-header {
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+    }
+    
+    .senior-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 2rem;
+      border-left: 5px solid #1e3a8a;
+    }
+    
+    .senior-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .btn-student {
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+      margin: 0.25rem;
+    }
+    
+    .btn-student:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      color: white;
+    }
+    
+    .btn-linkedin {
+      background: #0077b5;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+    }
+    
+    .btn-linkedin:hover {
+      transform: translateY(-2px);
+      background: #005885;
+      color: white;
+    }
+    
+    .senior-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid py-4">
+    <div class="student-header d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-users me-3"></i>Connect with Seniors</h2>
+        <p class="mb-0">Get mentorship and guidance from experienced alumni</p>
+      </div>
+      <div>
+        <a href="/student/dashboard" class="btn btn-outline-light">
+          <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+        <button class="btn btn-outline-light" onclick="logout()">
+          <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <% if (seniors.length > 0) { %>
+        <% seniors.forEach(senior => { %>
+          <div class="col-md-6 col-lg-4">
+            <div class="senior-card">
+              <div class="d-flex align-items-start mb-3">
+                <div class="senior-avatar me-3">
+                  <%= senior.name.charAt(0).toUpperCase() %>
+                </div>
+                <div class="flex-grow-1">
+                  <h5><%= senior.name %></h5>
+                  <p class="text-muted mb-1">
+                    <i class="fas fa-graduation-cap me-2"></i><%= senior.specialization %>
+                  </p>
+                  <p class="text-muted mb-2">
+                    <i class="fas fa-calendar me-2"></i>Class of <%= senior.graduation_year %>
+                  </p>
+                  <p class="text-muted">
+                    <i class="fas fa-envelope me-2"></i><%= senior.email %>
+                  </p>
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <span class="badge bg-success">
+                    <i class="fas fa-check-circle me-1"></i>Available for Mentoring
+                  </span>
+                </div>
+                <div>
+                  <% if (senior.linkedin_profile) { %>
+                    <a href="<%= senior.linkedin_profile %>" target="_blank" class="btn btn-linkedin btn-sm">
+                      <i class="fab fa-linkedin me-2"></i>LinkedIn
+                    </a>
+                  <% } %>
+                  <button class="btn btn-student btn-sm" onclick="connectWithSenior('<%= senior.name %>', '<%= senior.email %>')">
+                    <i class="fas fa-comments me-2"></i>Connect
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="col-12">
+          <div class="senior-card text-center">
+            <i class="fas fa-user-friends fa-4x text-muted mb-3"></i>
+            <h4>No Seniors Available</h4>
+            <p class="text-muted">Senior mentors will appear here when they become available.</p>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Connect Modal -->
+  <div class="modal fade" id="connectModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Connect with Senior</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>You can connect with <strong id="seniorName"></strong> through:</p>
+          <ul>
+            <li>Email: <span id="seniorEmail"></span></li>
+            <li>LinkedIn profile (if available)</li>
+            <li>College mentorship program</li>
+          </ul>
+          <p class="text-muted">Please be respectful and professional when reaching out for mentorship.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-student" onclick="sendEmail()">Send Email</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let currentSeniorEmail = '';
+
+    function connectWithSenior(name, email) {
+      document.getElementById('seniorName').textContent = name;
+      document.getElementById('seniorEmail').textContent = email;
+      currentSeniorEmail = email;
+      
+      const modal = new bootstrap.Modal(document.getElementById('connectModal'));
+      modal.show();
+    }
+
+    function sendEmail() {
+      const subject = 'Mentorship Request from Cloud Domain Portal Student';
+      const body = 'Dear Senior,\n\nI am a student from the Cloud Domain Portal and would like to connect with you for mentorship and guidance.\n\nThank you for your time.\n\nBest regards,\n<%= studentName %>';
+      
+      window.location.href = `mailto:${currentSeniorEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    async function logout() {
+      try {
+        const response = await fetch('/student/logout', { method: 'POST' });
+        if (response.ok) {
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+  </script>
+</body>
+</html>

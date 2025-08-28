@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login - Cloud Domain Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .student-login-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      padding: 3rem;
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    .student-login-card h2 {
+      color: #333;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+      text-align: center;
+    }
+    
+    .form-control {
+      padding: 1rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-control:focus {
+      border-color: #1e3a8a;
+      box-shadow: 0 0 0 0.2rem rgba(30, 58, 138, 0.25);
+    }
+    
+    .btn-student {
+      width: 100%;
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+      margin-bottom: 1rem;
+    }
+    
+    .btn-student:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    
+    .btn-back {
+      background: #6b7280;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+    
+    .btn-back:hover {
+      background: #4b5563;
+    }
+    
+    .alert {
+      margin-top: 1rem;
+      border-radius: 10px;
+    }
+    
+    .info-text {
+      background: #e0f2fe;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: #0277bd;
+    }
+  </style>
+</head>
+<body>
+  <div class="student-login-card">
+    <h2>Student Login</h2>
+    <div class="info-text">
+      <strong>Note:</strong> Use your Student ID and password provided by the admin to login.
+    </div>
+    <form id="studentLoginForm">
+      <div class="mb-3">
+        <label for="student_id" class="form-label">Student ID</label>
+        <input type="text" class="form-control" id="student_id" name="student_id" required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-student">Login</button>
+    </form>
+    <button class="btn btn-back" onclick="window.location.href='/'">Back to Main Site</button>
+    <div id="errorMessage"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+      
+      try {
+        const response = await fetch('/student/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          window.location.href = '/student/dashboard';
+        } else {
+          document.getElementById('errorMessage').innerHTML = 
+            '<div class="alert alert-danger">Invalid Student ID or password. Please try again.</div>';
+        }
+      } catch (error) {
+        document.getElementById('errorMessage').innerHTML = 
+          '<div class="alert alert-danger">Login failed. Please try again.</div>';
+      }
+    });
+  </script>
+</body>
+</html>
