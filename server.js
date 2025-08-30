@@ -155,6 +155,16 @@ function generateOTP() {
   return crypto.randomInt(100000, 999999).toString();
 }
 
+// Generate random password
+function generateRandomPassword() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let password = '';
+  for (let i = 0; i < 6; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
 // Middleware to check admin authentication
 const requireAdmin = (req, res, next) => {
   if (req.session.isAdmin) {
@@ -288,21 +298,20 @@ app.get('/admin/students', requireAdmin, async (req, res) => {
 
 // Add student
 app.post('/admin/students', requireAdmin, async (req, res) => {
-  const { roll_num, name, password, confirm_password, department, email } = req.body;
+  const { roll_num, name, department, email, batch_year } = req.body;
   
   try {
     // Validate input
-    if (!roll_num || !name || !password || !confirm_password || !department || !email) {
+    if (!roll_num || !name || !department || !email || !batch_year) {
       return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    if (password !== confirm_password) {
-      return res.status(400).json({ error: 'Passwords do not match' });
     }
 
     if (!email.endsWith('@gmail.com')) {
       return res.status(400).json({ error: 'Email must be a Gmail address' });
     }
+
+    // Generate random password
+    const password = generateRandomPassword();
 
     // Check if student already exists
     const existingStudent = await db.collection('students').findOne({
@@ -323,6 +332,7 @@ app.post('/admin/students', requireAdmin, async (req, res) => {
       email: email,
       password: hashedPassword,
       department: department,
+      batch_year: batch_year,
       phone: '',
       course: '',
       year: '',
@@ -342,6 +352,7 @@ app.post('/admin/students', requireAdmin, async (req, res) => {
         <div style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin: 20px 0;">
           <p><strong>Student ID:</strong> ${roll_num}</p>
           <p><strong>Password:</strong> ${password}</p>
+          <p><strong>Batch Year:</strong> ${batch_year}</p>
           <p><strong>Department:</strong> ${department}</p>
         </div>
         <p>You can login to the student portal using these credentials.</p>
@@ -360,6 +371,46 @@ app.post('/admin/students', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Error adding student:', error);
     res.status(500).json({ error: 'Failed to add student' });
+  }
+});
+
+// Delete single student
+app.delete('/admin/students/:id', requireAdmin, async (req, res) => {
+  const studentId = req.params.id;
+  
+  try {
+    const result = await db.collection('students').deleteOne({ _id: new ObjectId(studentId) });
+    
+    if (result.deletedCount === 1) {
+      res.json({ success: true, message: 'Student deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Student not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting student:', error);
+    res.status(500).json({ error: 'Failed to delete student' });
+  }
+});
+
+// Bulk delete students
+app.post('/admin/students/bulk-delete', requireAdmin, async (req, res) => {
+  const { studentIds } = req.body;
+  
+  try {
+    if (!studentIds || !Array.isArray(studentIds) || studentIds.length === 0) {
+      return res.status(400).json({ error: 'No student IDs provided' });
+    }
+    
+    const objectIds = studentIds.map(id => new ObjectId(id));
+    const result = await db.collection('students').deleteMany({ _id: { $in: objectIds } });
+    
+    res.json({ 
+      success: true, 
+      message: `${result.deletedCount} students deleted successfully` 
+    });
+  } catch (error) {
+    console.error('Error bulk deleting students:', error);
+    res.status(500).json({ error: 'Failed to delete students' });
   }
 });
 
