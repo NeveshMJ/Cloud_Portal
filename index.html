@@ -12,12 +12,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <!-- Navbar Section (Header) -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow" style="background-color: #1e3a8a;">
     <div class="container-fluid px-4">
       <a class="navbar-brand d-flex align-items-center" href="#home">
-        
         <span class="brand-text">Cloud<span style="color: #60a5fa;">Domain</span></span>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,13 +30,10 @@
             <a class="nav-link" href="#about">About Us</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#services">Services</a>
+            <a class="nav-link" href="#achievements">Achievements</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#gallery">Gallery</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/student-login">Login</a>
           </li>
         </ul>
       </div>
@@ -51,57 +46,95 @@
       <h1>Hello, Welcome to Cloud Computing</h1>
       <p>Your gateway to mastering modern cloud technologies and DevOps practices</p>
       <a href="/student-login" class="btn btn-primary btn-lg">LOGIN</a>
+      
+      <!-- Add this block below the login button -->
+<div class="login-description mt-5 text-center text-white" style="max-width: 700px; margin: 0 auto;">
+  <p>
+    Welcome to the PEP Cloud Computing & DevOps Centre! We empower students with cutting-edge cloud skills, AWS, Azure, and DevOps expertise, and hands-on project experience to prepare innovators of tomorrow.
+  </p>
+</div>
     </div>
   </section>
 
   <!-- About Us Section -->
-  <section id="about" class="py-5">
+  <section id="about" class="about-section py-5 bg-light">
     <div class="container">
       <h2 class="text-center mb-4">About Our Cloud Domain</h2>
-      <p class="text-center">We are a cloud computing community focusing on AWS, Azure, GCP, and beyond...</p>
-      <ul>
-        <li>AWS Cloud Training</li>
-        <li>Azure and GCP Services</li>
-        <li>Cloud Infrastructure Setup</li>
-      </ul>
+      <div class="about-stats-row">
+        <div class="about-stat-card">
+          <div class="stat-value">100+</div>
+          <div class="stat-label">Active Students</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="stat-value">1000+</div>
+          <div class="stat-label">Cloud Certifications</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="stat-value">30+</div>
+          <div class="stat-label">Industry Projects</div>
+        </div>
+        <div class="about-stat-card">
+          <div class="stat-value">3</div>
+          <div class="stat-label">Cloud Platforms<br>(AWS, Azure, GCP)</div>
+        </div>
+      </div>
+      <p class="text-center mt-4 text-secondary fs-5">
+        Our mission is to foster hands-on cloud experience, DevOps skills, and industry-readiness for all enthusiasts and professionals.
+      </p>
     </div>
-  </section>
+  </section>  
 
-  <!-- Services Section -->
-  <section id="services" class="py-5 bg-light">
+  <!-- Achievements Section (New) -->
+  <section id="achievements" class="py-5 bg-light">
     <div class="container">
-      <h2 class="text-center mb-4">Our Services</h2>
-      <div class="row text-center">
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <img src="cloudddd.png" class="card-img-top" alt="Cloud Computing Training">
-            <div class="card-body">
-              <h5 class="card-title">Cloud Computing Training</h5>
-              <p class="card-text">Learn how to use cloud platforms like AWS, Azure, and GCP through hands-on training.</p>
-            </div>
+      <h2 class="text-center mb-5 fw-bold text-dark">Our Achievements</h2>
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-4 col-lg-4">
+          <div class="achievement-card text-center h-100 shadow-sm p-4">
+            <h5 class="fw-bold mb-3 text-primary">AWS Cloud Club Team Formation – Nephele</h5>
+            <p class="achievement-text">Established the new AWS Cloud Club Team, introducing Nephele, our custom-built cloud bot, and championing student-led innovation and technical leadership for the batch of 2025–26.
+
+            </p>
           </div>
         </div>
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <img src="kodekloud.jpeg" class="card-img-top" alt="DevOps Solutions">
-            <div class="card-body">
-              <h5 class="card-title">DevOps Solutions</h5>
-              <p class="card-text">Implement continuous integration and continuous deployment practices using industry-leading tools.</p>
-            </div>
+        <div class="col-md-4 col-lg-4">
+          <div class="achievement-card text-center h-100 shadow-sm p-4">
+            <h5 class="fw-bold mb-3 text-primary">525+ Students Certified</h5>
+            <p class="achievement-text">Over 525 students earned industry-recognized cloud certifications in Amazon Web Services (AWS) and Microsoft Azure, boosting career growth and technical expertise within our campus community.
+
+            </p>
           </div>
         </div>
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <img src="supportt.jpeg" class="card-img-top" alt="Consulting & Support">
-            <div class="card-body">
-              <h5 class="card-title">Consulting & Support</h5>
-              <p class="card-text">Get expert advice on optimizing your cloud infrastructure and development workflows.</p>
-            </div>
+        <div class="col-md-4 col-lg-4">
+          <div class="achievement-card text-center h-100 shadow-sm p-4">
+            <h5 class="fw-bold mb-3 text-primary">Google Developer Group Solutions Challenge Bootcamp</h5>
+            <p class="achievement-text">Hosted the Regional Bootcamp for Google’s Solutions Challenge 2025, engaging students with hands-on training from Google, Hack2Skill, and NASSCOM experts on cutting-edge cloud technologies.</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <div class="achievement-card text-center h-100 shadow-sm p-4">
+            <h5 class="fw-bold mb-3 text-primary">Internship Recruitment Drive</h5>
+            <p class="achievement-text">Organized campus-wide internship drives, connecting 150+ AWS certified, 100+ Azure certified, and 80+ DevOps-skilled students with 8–12 week industry internships across top tech companies.
+
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <div class="achievement-card text-center h-100 shadow-sm p-4">
+            <h5 class="fw-bold mb-3 text-primary">TCS DevOps Workshop – Transformative Learning</h5>
+            <p class="achievement-text">A successful 2-day TCS DevOps Workshop empowered students and faculty in Agile methodologies, CI/CD pipelines, and cloud automation—equipping participants with practical software development and automation skills.</p>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <div class="achievement-card text-center h-100 shadow-sm p-4">
+            <h5 class="fw-bold mb-3 text-primary">AWS Cloud Club St.Joseph's – Learning & Leadership</h5>
+            <p class="achievement-text">We had an inspiring visit from Jen Looper—Head of Academic Advocacy at AWS—and Aditi Sawhney, Senior Digital Marketing Manager at AWS. Their knowledge-sharing and generous donation of cloud learning materials deeply enriched our community.</p>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </section>  
+  
 
   <!-- Gallery Section -->
   <section id="gallery" class="py-5">
@@ -110,32 +143,32 @@
       <div class="row">
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="awsssssssss.jpeg" class="card-img-top" alt="Cloud Image 1">
+            <img src="images/awsssssssss.jpeg" class="card-img-top" alt="Cloud Image 1">
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="azureee.jpeg" class="card-img-top" alt="Cloud Image 2">
+            <img src="images/azureee.jpeg" class="card-img-top" alt="Cloud Image 2">
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="shetech.jpeg" class="card-img-top" alt="Cloud Image 3">
+            <img src="images/shetech.jpeg" class="card-img-top" alt="Cloud Image 3">
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="challenges aws.jpeg" class="card-img-top" alt="Cloud Image 4">
+            <img src="images/challenges aws.jpeg" class="card-img-top" alt="Cloud Image 4">
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="sirr.jpeg" class="card-img-top" alt="Cloud Image 5">
+            <img src="images/sirr.jpeg" class="card-img-top" alt="Cloud Image 5">
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
-            <img src="community.jpeg" class="card-img-top" alt="Cloud Image 6">
+            <img src="images/community.jpeg" class="card-img-top" alt="Cloud Image 6">
           </div>
         </div>
       </div>
@@ -144,26 +177,18 @@
 
   <!-- Footer Section -->
   <footer class="py-4" style="background-color: #1e3a8a;">
-    <div class="container">
-      <div class="row justify-content-between">
-        <div class="col-md-6 text-center text-md-start">
-          <ul class="list-unstyled d-inline-flex mb-0">
-            <li><a href="#home" class="nav-link text-white">Home</a></li>
-            <li><a href="#about" class="nav-link text-white">About Us</a></li>
-            <li><a href="#services" class="nav-link text-white">Services</a></li>
-            <li><a href="#gallery" class="nav-link text-white">Gallery</a></li>
-          </ul>
-        </div>
-        <div class="col-md-6 text-center text-md-end">
-          <ul class="list-unstyled d-inline-flex mb-0">
-            <li><a href="https://www.linkedin.com/company/pep-cloud-computing-and-devops-centre" target="_blank" class="nav-link text-white">Visit Our LinkedIn Page</a></li>
-            <li><a href="/student-login" class="nav-link text-white">Login</a></li>
-          </ul>
-        </div>
-      </div>
-      <p class="text-center mt-4 text-white">&copy; 2025 PEP Cloud Computing & DevOps Centre. All rights reserved.</p>
+    <div class="container text-center">
+      <p class="mb-2 text-white">
+        &copy; 2025 PEP Cloud Computing &amp; DevOps Centre. All rights reserved.
+      </p>
+      <a 
+        href="https://www.linkedin.com/company/pep-cloud-computing-and-devops-centre" 
+        target="_blank" 
+        class="nav-link text-white text-decoration-underline">
+        Visit Our LinkedIn Page
+      </a>
     </div>
-  </footer>
+  </footer>  
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -179,6 +204,5 @@
       });
     });
   </script>
-
 </body>
 </html>

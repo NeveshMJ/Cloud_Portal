@@ -2,27 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Login | Cloud Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Cloud World</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-light">
-<div class="d-flex justify-content-center align-items-center vh-100">
-  <div class="card shadow p-4" style="width: 22rem;">
-    <h3 class="text-center mb-4">Login</h3>
-    <form>
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" placeholder="Enter email">
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow" style="background-color: #1e3a8a;">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <span class="brand-text">Cloud<span style="color: #60a5fa;">Domain</span></span>
+      </a>
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="index.html"><i class="fas fa-home me-2"></i>Back to Home</a>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-control" placeholder="Enter password">
+    </div>
+  </nav>
+
+  <!-- Login Section -->
+  <div class="login-bg">
+    <div class="container">
+      <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-lg-5 col-md-7 col-sm-9">
+          <div class="login-card">
+            <div class="text-center mb-4">
+              <div class="login-logo mb-3">
+                <i class="fas fa-cloud text-primary" style="font-size: 3rem;"></i>
+              </div>
+              <h2 class="login-title">Welcome Back</h2>
+              <p class="text-muted">Sign in to your Cloud Portal account</p>
+            </div>
+            
+            <form class="login-form" autocomplete="off">
+              <div class="form-floating mb-3">
+                <input type="email" id="email" class="form-control modern-input" placeholder="Enter your email" required>
+                <label for="email"><i class="fas fa-envelope me-2"></i>Student ID</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input type="password" id="password" class="form-control modern-input" placeholder="Enter your password" required>
+                <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+              </div>
+              
+              <div class="captcha-section mb-3">
+                <label class="form-label fw-semibold">
+                  <i class="fas fa-shield-alt me-2 text-success"></i>Security Check
+                </label>
+                <div class="captcha-question p-3 rounded bg-light border">
+                  <p class="mb-2 text-center fw-bold">What is <span id="captchaNum1" class="text-primary"></span> + <span id="captchaNum2" class="text-primary"></span>?</p>
+                  <input type="number" id="captcha" class="form-control text-center" placeholder="Enter your answer" required>
+                </div>
+                <div id="captcha-error" class="captcha-error mt-2">
+                  <i class="fas fa-exclamation-triangle me-2"></i>Incorrect captcha. Please try again.
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-login w-100 py-3">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+              </button>
+            </form>
+            
+            <div class="text-center mt-4">
+              <small class="text-muted">
+                Don't have an account? <a href="#" class="text-decoration-none">Contact Administrator</a>
+              </small>
+            </div>
+          </div>
+        </div>
       </div>
-      <button type="submit" class="btn btn-primary w-100">Login</button>
-    </form>
+    </div>
   </div>
-</div>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Generate simple captcha
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    document.getElementById('captchaNum1').innerText = num1;
+    document.getElementById('captchaNum2').innerText = num2;
+    
+    const form = document.querySelector('.login-form');
+    const captchaError = document.getElementById('captcha-error');
+    
+    form.addEventListener('submit', function(e) {
+      const captchaInput = document.getElementById('captcha').value;
+      if (parseInt(captchaInput) !== num1 + num2) {
+        e.preventDefault();
+        captchaError.style.display = 'block';
+        // Add shake animation to the form
+        document.querySelector('.login-card').classList.add('shake');
+        setTimeout(() => {
+          document.querySelector('.login-card').classList.remove('shake');
+        }, 500);
+      } else {
+        captchaError.style.display = 'none';
+        // You can add success handling here
+        // For now, prevent actual form submission for demo
+        e.preventDefault();
+        alert('Login validation successful! (Demo mode)');
+      }
+    });
+    
+    // Add floating label effect
+    document.querySelectorAll('.modern-input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      
+      input.addEventListener('blur', function() {
+        if (!this.value) {
+          this.parentElement.classList.remove('focused');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
