@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance - Student Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .student-header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 24px;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 40px rgba(30, 58, 138, 0.2);
+    }
+    
+    .attendance-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .btn-student {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-student:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(30, 58, 138, 0.3);
+      color: white;
+    }
+    
+    .attendance-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .calendar-view {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .calendar-day {
+      background: white;
+      padding: 1rem;
+      text-align: center;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .calendar-day.present {
+      background: #dcfce7;
+      color: #166534;
+    }
+    
+    .calendar-day.absent {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .calendar-day.holiday {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid py-4">
+    <div class="student-header d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-calendar-check me-3"></i>Attendance Record</h2>
+        <p class="mb-0">Track your attendance and performance</p>
+      </div>
+      <div>
+        <a href="/student/dashboard" class="btn btn-outline-light">
+          <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+        <button class="btn btn-outline-light" onclick="logout()">
+          <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Attendance Statistics -->
+    <div class="attendance-stats">
+      <div class="stat-card">
+        <div class="stat-number text-success" id="attendancePercentage">0%</div>
+        <div class="text-muted">Overall Attendance</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number text-primary" id="daysPresent">0</div>
+        <div class="text-muted">Days Present</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number text-danger" id="daysAbsent">0</div>
+        <div class="text-muted">Days Absent</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number text-warning" id="daysLate">0</div>
+        <div class="text-muted">Late Arrivals</div>
+      </div>
+    </div>
+
+    <!-- Monthly View -->
+    <div class="attendance-card">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5><i class="fas fa-calendar me-2"></i><span id="currentMonth">January 2025</span> Attendance</h5>
+        <div>
+          <button class="btn btn-outline-primary btn-sm me-2">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="calendar-view" id="calendarView">
+        <!-- Calendar will be generated dynamically -->
+      </div>
+      
+      <div class="mt-4">
+        <div class="row text-center">
+          <div class="col-md-3">
+            <span class="badge bg-success me-2"></span>Present
+          </div>
+          <div class="col-md-3">
+            <span class="badge bg-danger me-2"></span>Absent
+          </div>
+          <div class="col-md-3">
+            <span class="badge bg-secondary me-2"></span>Holiday
+          </div>
+          <div class="col-md-3">
+            <span class="badge bg-warning me-2"></span>Late
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Records -->
+    <div class="attendance-card">
+      <h5><i class="fas fa-list-alt me-2"></i>Detailed Attendance Records</h5>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Date</th>
+              <th>Subject</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceRecordsBody">
+            <!-- Attendance records will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let attendanceRecords = [];
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    // Load attendance data on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadAttendanceData();
+    });
+
+    async function loadAttendanceData() {
+      try {
+        const response = await fetch('/api/student/attendance');
+        const data = await response.json();
+        
+        if (data.success) {
+          attendanceRecords = data.attendance;
+          updateAttendanceStats();
+          generateCalendar();
+          loadAttendanceRecords();
+        }
+      } catch (error) {
+        console.error('Error loading attendance data:', error);
+        // Show sample data if API fails
+        showSampleData();
+      }
+    }
+
+    function showSampleData() {
+      // Fallback sample data
+      attendanceRecords = [
+        { date: '2025-01-31', subject: 'Cloud Computing Fundamentals', time: '09:00', status: 'present' },
+        { date: '2025-01-30', subject: 'AWS Services', time: '09:15', status: 'late' },
+        { date: '2025-01-29', subject: 'DevOps Practices', time: '', status: 'absent' },
+        { date: '2025-01-28', subject: 'Azure Fundamentals', time: '09:00', status: 'present' }
+      ];
+      updateAttendanceStats();
+      generateCalendar();
+      loadAttendanceRecords();
+    }
+
+    function updateAttendanceStats() {
+      const totalDays = attendanceRecords.length;
+      const presentDays = attendanceRecords.filter(r => r.status === 'present').length;
+      const absentDays = attendanceRecords.filter(r => r.status === 'absent').length;
+      const lateDays = attendanceRecords.filter(r => r.status === 'late').length;
+      
+      const attendancePercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+      
+      document.getElementById('attendancePercentage').textContent = attendancePercentage + '%';
+      document.getElementById('daysPresent').textContent = presentDays;
+      document.getElementById('daysAbsent').textContent = absentDays;
+      document.getElementById('daysLate').textContent = lateDays;
+    }
+
+    function generateCalendar() {
+      const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+      
+      document.getElementById('currentMonth').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      const startDate = new Date(firstDay);
+      startDate.setDate(startDate.getDate() - firstDay.getDay());
+      
+      let calendarHTML = `
+        <div class="calendar-day fw-bold bg-light">Sun</div>
+        <div class="calendar-day fw-bold bg-light">Mon</div>
+        <div class="calendar-day fw-bold bg-light">Tue</div>
+        <div class="calendar-day fw-bold bg-light">Wed</div>
+        <div class="calendar-day fw-bold bg-light">Thu</div>
+        <div class="calendar-day fw-bold bg-light">Fri</div>
+        <div class="calendar-day fw-bold bg-light">Sat</div>
+      `;
+      
+      for (let i = 0; i < 42; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(startDate.getDate() + i);
+        
+        const dateStr = currentDate.toISOString().split('T')[0];
+        const attendanceRecord = attendanceRecords.find(r => r.date.split('T')[0] === dateStr);
+        
+        let dayClass = 'calendar-day';
+        let dayContent = '';
+        
+        if (currentDate.getMonth() === currentMonth) {
+          dayContent = currentDate.getDate();
+          
+          if (attendanceRecord) {
+            dayClass += ` ${attendanceRecord.status}`;
+          } else if (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+            dayClass += ' holiday';
+          }
+        }
+        
+        calendarHTML += `<div class="${dayClass}">${dayContent}</div>`;
+      }
+      
+      document.getElementById('calendarView').innerHTML = calendarHTML;
+    }
+
+    function loadAttendanceRecords() {
+      const tbody = document.getElementById('attendanceRecordsBody');
+      
+      if (attendanceRecords.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No attendance records found</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = attendanceRecords.map(record => {
+        const statusClass = record.status === 'present' ? 'success' : 
+                           record.status === 'absent' ? 'danger' : 'warning';
+        const remarks = record.status === 'present' ? 'On time' :
+                       record.status === 'late' ? 'Late arrival' : 'Absent';
+        
+        return `
+          <tr>
+            <td>${new Date(record.date).toLocaleDateString()}</td>
+            <td>${record.subject}</td>
+            <td>${record.time || '-'}</td>
+            <td><span class="badge bg-${statusClass}">${record.status.charAt(0).toUpperCase() + record.status.slice(1)}</span></td>
+            <td>${remarks}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function logout() {
+      try {
+        const response = await fetch('/student/logout', { method: 'POST' });
+        if (response.ok) {
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+  </script>
+</body>
+</html>

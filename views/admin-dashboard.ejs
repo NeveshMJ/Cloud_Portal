@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Cloud Domain Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    
+    .admin-header {
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      border-left: 5px solid #1e3a8a;
+      margin-bottom: 2rem;
+    }
+    
+    .stats-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stats-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #1e3a8a;
+    }
+    
+    .cloud-concepts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .concept-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      border-left: 5px solid #1e3a8a;
+    }
+    
+    .concept-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .concept-card h3 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .concept-card p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .concept-features {
+      list-style: none;
+      margin-top: 1rem;
+      padding: 0;
+    }
+    
+    .concept-features li {
+      color: #555;
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+      position: relative;
+    }
+    
+    .concept-features li:before {
+      content: "✓";
+      color: #059669;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+    
+    .btn-admin {
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+      margin: 0.5rem;
+    }
+    
+    .btn-admin:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid py-4">
+    <div class="admin-header d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-tachometer-alt me-3"></i>Admin Dashboard</h2>
+        <p class="mb-0">Cloud Domain Portal Management System</p>
+      </div>
+      <div>
+        <a href="/admin/students" class="btn btn-admin">
+          <i class="fas fa-users me-2"></i>Manage Students
+        </a>
+        <a href="/admin/attendance" class="btn btn-admin">
+          <i class="fas fa-calendar-check me-2"></i>Attendance
+        </a>
+        <a href="/admin/documents" class="btn btn-admin">
+          <i class="fas fa-file-upload me-2"></i>Documents
+        </a>
+        <button class="btn btn-outline-light" onclick="logout()">
+          <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row" id="statsContainer">
+      <div class="col-md-3">
+        <div class="stats-card text-center">
+          <i class="fas fa-users fa-3x text-primary mb-3"></i>
+          <div class="stats-number" id="totalStudents">0</div>
+          <h5>Total Students</h5>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card text-center">
+          <i class="fas fa-tasks fa-3x text-success mb-3"></i>
+          <div class="stats-number" id="totalTasks">0</div>
+          <h5>Total Tasks</h5>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card text-center">
+          <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+          <div class="stats-number" id="pendingTasks">0</div>
+          <h5>Pending Tasks</h5>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stats-card text-center">
+          <i class="fas fa-file-alt fa-3x text-info mb-3"></i>
+          <div class="stats-number" id="totalDocuments">0</div>
+          <h5>Documents</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cloud Concepts Section -->
+    <div class="cloud-concepts">
+      <div class="concept-card">
+        <h3><i class="fas fa-server me-2"></i>Infrastructure as a Service (IaaS)</h3>
+        <p>Fundamental cloud computing model providing virtualized computing resources over the internet.</p>
+        <ul class="concept-features">
+          <li>Virtual machines and servers</li>
+          <li>Storage and networking</li>
+          <li>Operating systems</li>
+          <li>Pay-as-you-use pricing</li>
+        </ul>
+      </div>
+
+      <div class="concept-card">
+        <h3><i class="fas fa-layer-group me-2"></i>Platform as a Service (PaaS)</h3>
+        <p>Cloud platform providing development and deployment environment for applications.</p>
+        <ul class="concept-features">
+          <li>Development frameworks</li>
+          <li>Database management</li>
+          <li>Business analytics</li>
+          <li>Application hosting</li>
+        </ul>
+      </div>
+
+      <div class="concept-card">
+        <h3><i class="fas fa-cloud me-2"></i>Software as a Service (SaaS)</h3>
+        <p>Software distribution model where applications are hosted by a service provider.</p>
+        <ul class="concept-features">
+          <li>Web-based applications</li>
+          <li>Automatic updates</li>
+          <li>Accessibility from anywhere</li>
+          <li>Subscription-based pricing</li>
+        </ul>
+      </div>
+
+      <div class="concept-card">
+        <h3><i class="fas fa-shield-alt me-2"></i>Cloud Security</h3>
+        <p>Comprehensive security measures to protect cloud-based systems and data.</p>
+        <ul class="concept-features">
+          <li>Identity and access management</li>
+          <li>Data encryption</li>
+          <li>Network security</li>
+          <li>Compliance monitoring</li>
+        </ul>
+      </div>
+
+      <div class="concept-card">
+        <h3><i class="fas fa-database me-2"></i>Cloud Storage</h3>
+        <p>Remote storage service providing data storage and retrieval over the internet.</p>
+        <ul class="concept-features">
+          <li>Object storage</li>
+          <li>Block storage</li>
+          <li>File storage</li>
+          <li>Data backup and recovery</li>
+        </ul>
+      </div>
+
+      <div class="concept-card">
+        <h3><i class="fas fa-exchange-alt me-2"></i>Cloud Migration</h3>
+        <p>Process of moving digital assets, services, and applications to cloud infrastructure.</p>
+        <ul class="concept-features">
+          <li>Assessment and planning</li>
+          <li>Data migration strategies</li>
+          <li>Application modernization</li>
+          <li>Performance optimization</li>
+        </ul>
+      </div>
+
+      <div class="concept-card">
+        <h3><i class="fas fa-cogs me-2"></i>DevOps in Cloud</h3>
+        <p>Integration of development and operations practices in cloud environments.</p>
+        <ul class="concept-features">
+          <li>Continuous integration/deployment</li>
+          <li>Infrastructure as code</li>
+          <li>Automated testing</li>
+          <li>Monitoring and logging</li>
+        </ul>
+      </div>
+
+      <div class="concept-card">
+        <h3><i class="fas fa-network-wired me-2"></i>Multi-Cloud Strategy</h3>
+        <p>Using multiple cloud computing services from different providers.</p>
+        <ul class="concept-features">
+          <li>Vendor lock-in avoidance</li>
+          <li>Risk distribution</li>
+          <li>Cost optimization</li>
+          <li>Best-of-breed services</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Load statistics
+    async function loadStats() {
+      try {
+        const response = await fetch('/api/admin/stats');
+        const stats = await response.json();
+        
+        document.getElementById('totalStudents').textContent = stats.totalStudents;
+        document.getElementById('totalTasks').textContent = stats.totalTasks;
+        document.getElementById('pendingTasks').textContent = stats.pendingTasks;
+        document.getElementById('totalDocuments').textContent = stats.totalDocuments;
+      } catch (error) {
+        console.error('Error loading stats:', error);
+      }
+    }
+
+    // Logout function
+    async function logout() {
+      try {
+        const response = await fetch('/admin/logout', { method: 'POST' });
+        if (response.ok) {
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+
+    // Load stats on page load
+    loadStats();
+  </script>
+</body>
+</html>

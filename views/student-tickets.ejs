@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Tickets - Student Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .student-header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 24px;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 40px rgba(30, 58, 138, 0.2);
+    }
+    
+    .ticket-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    
+    .ticket-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+    
+    .btn-student {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-student:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(30, 58, 138, 0.3);
+      color: white;
+    }
+    
+    .priority-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    
+    .priority-low { background: #dcfce7; color: #166534; }
+    .priority-medium { background: #fef3c7; color: #92400e; }
+    .priority-high { background: #fee2e2; color: #991b1b; }
+    
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+    }
+    
+    .status-open { background: #dbeafe; color: #1e40af; }
+    .status-in-progress { background: #fef3c7; color: #92400e; }
+    .status-resolved { background: #dcfce7; color: #166534; }
+    .status-closed { background: #f3f4f6; color: #374151; }
+  </style>
+</head>
+<body>
+  <div class="container-fluid py-4">
+    <div class="student-header d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-question-circle me-3"></i>Support Tickets</h2>
+        <p class="mb-0">Get help and connect with seniors for guidance</p>
+      </div>
+      <div>
+        <a href="/student/dashboard" class="btn btn-outline-light">
+          <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+        <button class="btn btn-outline-light" onclick="logout()">
+          <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Create New Ticket -->
+    <div class="ticket-card">
+      <h4><i class="fas fa-plus-circle me-2"></i>Create New Support Ticket</h4>
+      <form id="ticketForm">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="subject" class="form-label">Subject</label>
+              <input type="text" class="form-control" id="subject" name="subject" required>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mb-3">
+              <label for="category" class="form-label">Category</label>
+              <select class="form-control" id="category" name="category" required>
+                <option value="">Select Category</option>
+                <option value="technical-doubt">Technical Doubt</option>
+                <option value="assignment-help">Assignment Help</option>
+                <option value="career-guidance">Career Guidance</option>
+                <option value="project-support">Project Support</option>
+                <option value="general-query">General Query</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="mb-3">
+              <label for="priority" class="form-label">Priority</label>
+              <select class="form-control" id="priority" name="priority" required>
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" name="description" rows="4" placeholder="Describe your issue or question in detail..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-student">
+          <i class="fas fa-paper-plane me-2"></i>Submit Ticket
+        </button>
+      </form>
+      <div id="ticketMessage"></div>
+    </div>
+
+    <!-- My Tickets -->
+    <div class="ticket-card">
+      <h4><i class="fas fa-list me-2"></i>My Support Tickets</h4>
+      <div id="ticketsList">
+        <!-- Sample tickets for demonstration -->
+        <div class="border rounded-3 p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6>AWS Lambda Function Deployment Issue</h6>
+              <p class="text-muted mb-2">Having trouble deploying my Lambda function. Getting timeout errors...</p>
+              <small class="text-muted">
+                <i class="fas fa-calendar me-1"></i>Created: 2 days ago
+              </small>
+            </div>
+            <div class="text-end">
+              <span class="priority-badge priority-high">High</span><br>
+              <span class="status-badge status-in-progress mt-1">In Progress</span>
+            </div>
+          </div>
+          <div class="mt-3">
+            <small class="text-success">
+              <i class="fas fa-user me-1"></i>Assigned to: Sarah Johnson (Senior)
+            </small>
+          </div>
+        </div>
+        
+        <div class="border rounded-3 p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6>Docker Container Configuration</h6>
+              <p class="text-muted mb-2">Need help with Docker container networking setup for my project...</p>
+              <small class="text-muted">
+                <i class="fas fa-calendar me-1"></i>Created: 5 days ago
+              </small>
+            </div>
+            <div class="text-end">
+              <span class="priority-badge priority-medium">Medium</span><br>
+              <span class="status-badge status-resolved mt-1">Resolved</span>
+            </div>
+          </div>
+          <div class="mt-3">
+            <small class="text-success">
+              <i class="fas fa-user me-1"></i>Resolved by: Mike Chen (Senior)
+            </small>
+          </div>
+        </div>
+        
+        <div class="border rounded-3 p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6>Career Guidance for Cloud Certifications</h6>
+              <p class="text-muted mb-2">Which AWS certifications should I pursue first as a beginner?</p>
+              <small class="text-muted">
+                <i class="fas fa-calendar me-1"></i>Created: 1 week ago
+              </small>
+            </div>
+            <div class="text-end">
+              <span class="priority-badge priority-low">Low</span><br>
+              <span class="status-badge status-closed mt-1">Closed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Available Seniors -->
+    <div class="ticket-card">
+      <h4><i class="fas fa-users me-2"></i>Available Seniors for Help</h4>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="border rounded-3 p-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                <span class="text-white fw-bold">SJ</span>
+              </div>
+              <div>
+                <h6 class="mb-1">Sarah Johnson</h6>
+                <small class="text-muted">AWS Cloud Architecture Specialist</small><br>
+                <span class="badge bg-success">Available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="border rounded-3 p-3">
+            <div class="d-flex align-items-center">
+              <div class="bg-info rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                <span class="text-white fw-bold">MC</span>
+              </div>
+              <div>
+                <h6 class="mb-1">Mike Chen</h6>
+                <small class="text-muted">DevOps Engineering Expert</small><br>
+                <span class="badge bg-warning">Busy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+      
+      // Simulate ticket creation
+      document.getElementById('ticketMessage').innerHTML = 
+        '<div class="alert alert-success mt-3"><i class="fas fa-check-circle me-2"></i>Support ticket created successfully! You will be notified when a senior responds.</div>';
+      
+      e.target.reset();
+      
+      setTimeout(() => {
+        document.getElementById('ticketMessage').innerHTML = '';
+      }, 5000);
+    });
+
+    async function logout() {
+      try {
+        const response = await fetch('/student/logout', { method: 'POST' });
+        if (response.ok) {
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+  </script>
+</body>
+</html>

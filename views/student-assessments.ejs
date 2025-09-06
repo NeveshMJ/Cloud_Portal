@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessments - Student Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .student-header {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 24px;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 40px rgba(30, 58, 138, 0.2);
+    }
+    
+    .assessment-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      margin-bottom: 2rem;
+      border: 1px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+    
+    .assessment-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+    
+    .level-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .level-low {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+    
+    .level-medium {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+    }
+    
+    .level-high {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+    
+    .btn-student {
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-student:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(30, 58, 138, 0.3);
+      color: white;
+    }
+    
+    .quiz-container {
+      display: none;
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .question-card {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #3b82f6;
+    }
+    
+    .option-card {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .option-card:hover {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+    
+    .option-card.selected {
+      border-color: #1e3a8a;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    }
+    
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid py-4">
+    <div class="student-header d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-clipboard-check me-3"></i>Cloud Computing Assessments</h2>
+        <p class="mb-0">Test your knowledge and track your progress</p>
+      </div>
+      <div>
+        <a href="/student/dashboard" class="btn btn-outline-light">
+          <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </a>
+        <button class="btn btn-outline-light" onclick="logout()">
+          <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Assessment Selection -->
+    <div id="assessmentSelection">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="assessment-card text-center">
+            <div class="mb-3">
+              <i class="fas fa-seedling fa-4x text-success"></i>
+            </div>
+            <h4>Beginner Level</h4>
+            <span class="level-badge level-low">Low Difficulty</span>
+            <p class="mt-3 text-muted">Basic cloud computing concepts, fundamental AWS services, and introductory DevOps practices.</p>
+            <ul class="list-unstyled text-start mt-3">
+              <li><i class="fas fa-check text-success me-2"></i>Cloud Computing Basics</li>
+              <li><i class="fas fa-check text-success me-2"></i>AWS Core Services</li>
+              <li><i class="fas fa-check text-success me-2"></i>Basic Networking</li>
+              <li><i class="fas fa-check text-success me-2"></i>Security Fundamentals</li>
+            </ul>
+            <button class="btn btn-student mt-3" onclick="startAssessment('low')">
+              <i class="fas fa-play me-2"></i>Start Assessment
+            </button>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="assessment-card text-center">
+            <div class="mb-3">
+              <i class="fas fa-chart-line fa-4x text-warning"></i>
+            </div>
+            <h4>Intermediate Level</h4>
+            <span class="level-badge level-medium">Medium Difficulty</span>
+            <p class="mt-3 text-muted">Advanced cloud services, multi-cloud strategies, and intermediate DevOps tools and practices.</p>
+            <ul class="list-unstyled text-start mt-3">
+              <li><i class="fas fa-check text-warning me-2"></i>Advanced AWS Services</li>
+              <li><i class="fas fa-check text-warning me-2"></i>Azure & GCP Integration</li>
+              <li><i class="fas fa-check text-warning me-2"></i>CI/CD Pipelines</li>
+              <li><i class="fas fa-check text-warning me-2"></i>Container Orchestration</li>
+            </ul>
+            <button class="btn btn-student mt-3" onclick="startAssessment('medium')">
+              <i class="fas fa-play me-2"></i>Start Assessment
+            </button>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="assessment-card text-center">
+            <div class="mb-3">
+              <i class="fas fa-trophy fa-4x text-danger"></i>
+            </div>
+            <h4>Advanced Level</h4>
+            <span class="level-badge level-high">High Difficulty</span>
+            <p class="mt-3 text-muted">Expert-level cloud architecture, enterprise solutions, and advanced DevOps methodologies.</p>
+            <ul class="list-unstyled text-start mt-3">
+              <li><i class="fas fa-check text-danger me-2"></i>Cloud Architecture Design</li>
+              <li><i class="fas fa-check text-danger me-2"></i>Enterprise Solutions</li>
+              <li><i class="fas fa-check text-danger me-2"></i>Advanced Security</li>
+              <li><i class="fas fa-check text-danger me-2"></i>Performance Optimization</li>
+            </ul>
+            <button class="btn btn-student mt-3" onclick="startAssessment('high')">
+              <i class="fas fa-play me-2"></i>Start Assessment
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Container -->
+    <div class="quiz-container" id="quizContainer">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 id="quizTitle">Assessment in Progress</h4>
+        <div class="d-flex align-items-center">
+          <span class="me-3">Progress:</span>
+          <div class="progress" style="width: 200px; height: 8px;">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+          </div>
+          <span class="ms-3" id="progressText">0/10</span>
+        </div>
+      </div>
+      
+      <div id="questionContainer">
+        <!-- Questions will be loaded here -->
+      </div>
+      
+      <div class="d-flex justify-content-between mt-4">
+        <button class="btn btn-secondary" onclick="endAssessment()">
+          <i class="fas fa-times me-2"></i>End Assessment
+        </button>
+        <div>
+          <button class="btn btn-outline-primary me-2" id="prevBtn" onclick="previousQuestion()" disabled>
+            <i class="fas fa-arrow-left me-2"></i>Previous
+          </button>
+          <button class="btn btn-student" id="nextBtn" onclick="nextQuestion()">
+            Next<i class="fas fa-arrow-right ms-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Container -->
+    <div class="quiz-container" id="resultsContainer">
+      <div class="text-center">
+        <div class="mb-4">
+          <i class="fas fa-medal fa-5x text-warning"></i>
+        </div>
+        <h3>Assessment Complete!</h3>
+        <div class="row justify-content-center mt-4">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body text-center">
+                <h2 class="text-primary" id="finalScore">0/10</h2>
+                <p class="text-muted">Final Score</p>
+                <div id="scoreMessage" class="mt-3"></div>
+                <button class="btn btn-student mt-3" onclick="resetAssessment()">
+                  <i class="fas fa-redo me-2"></i>Take Another Assessment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let currentLevel = '';
+    let currentQuestionIndex = 0;
+    let questions = [];
+    let userAnswers = [];
+    let score = 0;
+
+    const questionSets = {
+      low: [
+        {
+          question: "What does 'Cloud Computing' mean?",
+          options: [
+            "Computing using physical servers only",
+            "Delivery of computing services over the internet",
+            "Local network computing",
+            "Desktop computing"
+          ],
+          correct: 1
+        },
+        {
+          question: "Which of the following is a major cloud service provider?",
+          options: ["Microsoft Office", "Amazon Web Services (AWS)", "Adobe Photoshop", "Google Chrome"],
+          correct: 1
+        },
+        {
+          question: "What does 'IaaS' stand for?",
+          options: [
+            "Internet as a Service",
+            "Infrastructure as a Service", 
+            "Information as a Service",
+            "Integration as a Service"
+          ],
+          correct: 1
+        },
+        {
+          question: "What is the main benefit of cloud computing?",
+          options: [
+            "Higher hardware costs",
+            "Limited accessibility",
+            "Scalability and cost-effectiveness",
+            "Slower performance"
+          ],
+          correct: 2
+        },
+        {
+          question: "Which deployment model allows multiple organizations to share cloud infrastructure?",
+          options: ["Private Cloud", "Public Cloud", "Community Cloud", "Hybrid Cloud"],
+          correct: 2
+        }
+      ],
+      medium: [
+        {
+          question: "What is the primary purpose of AWS Lambda?",
+          options: [
+            "Database management",
+            "Serverless computing",
+            "Network security",
+            "File storage"
+          ],
+          correct: 1
+        },
+        {
+          question: "In DevOps, what does CI/CD stand for?",
+          options: [
+            "Cloud Integration/Cloud Deployment",
+            "Continuous Integration/Continuous Deployment",
+            "Code Integration/Code Development",
+            "Container Integration/Container Deployment"
+          ],
+          correct: 1
+        },
+        {
+          question: "Which AWS service is primarily used for content delivery?",
+          options: ["EC2", "S3", "CloudFront", "RDS"],
+          correct: 2
+        },
+        {
+          question: "What is Docker primarily used for?",
+          options: [
+            "Database management",
+            "Containerization",
+            "Network monitoring",
+            "Code compilation"
+          ],
+          correct: 1
+        },
+        {
+          question: "Which of the following is a Infrastructure as Code tool?",
+          options: ["Jenkins", "Docker", "Terraform", "Git"],
+          correct: 2
+        }
+      ],
+      high: [
+        {
+          question: "In a microservices architecture, what is the primary challenge?",
+          options: [
+            "Service discovery and communication",
+            "Single point of failure",
+            "Monolithic deployment",
+            "Limited scalability"
+          ],
+          correct: 0
+        },
+        {
+          question: "What is the CAP theorem in distributed systems?",
+          options: [
+            "Consistency, Availability, Performance",
+            "Consistency, Availability, Partition tolerance",
+            "Capacity, Availability, Performance",
+            "Consistency, Accuracy, Partition tolerance"
+          ],
+          correct: 1
+        },
+        {
+          question: "Which pattern is best for handling failures in distributed systems?",
+          options: [
+            "Circuit Breaker Pattern",
+            "Singleton Pattern",
+            "Factory Pattern",
+            "Observer Pattern"
+          ],
+          correct: 0
+        },
+        {
+          question: "What is the primary benefit of using Kubernetes?",
+          options: [
+            "Code compilation",
+            "Container orchestration and management",
+            "Database optimization",
+            "Network security"
+          ],
+          correct: 1
+        },
+        {
+          question: "In cloud security, what is the shared responsibility model?",
+          options: [
+            "Cloud provider handles all security",
+            "Customer handles all security",
+            "Security responsibilities are shared between provider and customer",
+            "Security is handled by third parties"
+          ],
+          correct: 2
+        }
+      ]
+    };
+
+    function startAssessment(level) {
+      currentLevel = level;
+      questions = questionSets[level];
+      currentQuestionIndex = 0;
+      userAnswers = [];
+      score = 0;
+      
+      document.getElementById('assessmentSelection').style.display = 'none';
+      document.getElementById('quizContainer').style.display = 'block';
+      document.getElementById('quizTitle').textContent = `${level.charAt(0).toUpperCase() + level.slice(1)} Level Assessment`;
+      
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const question = questions[currentQuestionIndex];
+      const container = document.getElementById('questionContainer');
+      
+      container.innerHTML = `
+        <div class="question-card">
+          <h5>Question ${currentQuestionIndex + 1} of ${questions.length}</h5>
+          <h4 class="mt-3">${question.question}</h4>
+          <div class="options-container mt-4">
+            ${question.options.map((option, index) => `
+              <div class="option-card" onclick="selectOption(${index})">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="answer" id="option${index}" value="${index}">
+                  <label class="form-check-label w-100" for="option${index}">
+                    ${option}
+                  </label>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      
+      updateProgress();
+      updateNavigationButtons();
+    }
+
+    function selectOption(optionIndex) {
+      // Clear previous selections
+      document.querySelectorAll('.option-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      // Select current option
+      const selectedCard = document.querySelectorAll('.option-card')[optionIndex];
+      selectedCard.classList.add('selected');
+      
+      // Update radio button
+      document.getElementById(`option${optionIndex}`).checked = true;
+      
+      userAnswers[currentQuestionIndex] = optionIndex;
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion();
+      } else {
+        finishAssessment();
+      }
+    }
+
+    function previousQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        loadQuestion();
+      }
+    }
+
+    function updateProgress() {
+      const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+      document.getElementById('progressText').textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+    }
+
+    function updateNavigationButtons() {
+      document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
+      document.getElementById('nextBtn').textContent = 
+        currentQuestionIndex === questions.length - 1 ? 'Finish Assessment' : 'Next';
+    }
+
+    function finishAssessment() {
+      // Calculate score
+      score = 0;
+      for (let i = 0; i < questions.length; i++) {
+        if (userAnswers[i] === questions[i].correct) {
+          score++;
+        }
+      }
+      
+      document.getElementById('quizContainer').style.display = 'none';
+      document.getElementById('resultsContainer').style.display = 'block';
+      document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+      
+      const percentage = (score / questions.length) * 100;
+      let message = '';
+      let messageClass = '';
+      
+      if (percentage >= 80) {
+        message = 'Excellent! You have a strong understanding of cloud computing concepts.';
+        messageClass = 'text-success';
+      } else if (percentage >= 60) {
+        message = 'Good job! You have a solid foundation. Consider reviewing some topics.';
+        messageClass = 'text-primary';
+      } else {
+        message = 'Keep learning! Review the study materials and try again.';
+        messageClass = 'text-warning';
+      }
+      
+      document.getElementById('scoreMessage').innerHTML = `<p class="${messageClass}">${message}</p>`;
+    }
+
+    function resetAssessment() {
+      document.getElementById('resultsContainer').style.display = 'none';
+      document.getElementById('assessmentSelection').style.display = 'block';
+      currentQuestionIndex = 0;
+      userAnswers = [];
+      score = 0;
+    }
+
+    function endAssessment() {
+      if (confirm('Are you sure you want to end this assessment? Your progress will be lost.')) {
+        resetAssessment();
+      }
+    }
+
+    async function logout() {
+      try {
+        const response = await fetch('/student/logout', { method: 'POST' });
+        if (response.ok) {
+          window.location.href = '/';
+        }
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    }
+  </script>
+</body>
+</html>

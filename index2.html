@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud Domain Portal</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Admin CSS -->
+  <style>
+    .admin-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      z-index: 9999;
+      overflow-y: auto;
+    }
+
+    .admin-login-form {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      padding: 3rem;
+      max-width: 400px;
+      margin: 10vh auto;
+      text-align: center;
+    }
+
+    .admin-login-form h2 {
+      color: #333;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    .admin-form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .admin-form-group label {
+      display: block;
+      color: #555;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .admin-form-group input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e1e5e9;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .admin-form-group input:focus {
+      outline: none;
+      border-color: #1e3a8a;
+    }
+
+    .admin-login-button {
+      width: 100%;
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      margin-bottom: 1rem;
+    }
+
+    .admin-login-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    .admin-back-button {
+      background: #6b7280;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .admin-back-button:hover {
+      background: #4b5563;
+    }
+
+    .admin-error {
+      color: #ef4444;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .admin-dashboard {
+      display: none;
+      background: white;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .admin-header {
+      background: linear-gradient(45deg, #1e3a8a, #3b82f6);
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-header h2 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    .admin-logout-button {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .admin-logout-button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .cloud-concepts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .concept-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      border-left: 5px solid #1e3a8a;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .concept-card h3 {
+      color: #333;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .concept-card p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .concept-features {
+      list-style: none;
+      margin-top: 1rem;
+      padding: 0;
+    }
+
+    .concept-features li {
+      color: #555;
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .concept-features li:before {
+      content: "✓";
+      color: #059669;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Original Website Content -->
+  <div id="main-website">
+    <!-- Navbar Section (Header) -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow" style="background-color: #1e3a8a;">
+      <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center" href="#home">
+          
+          <span class="brand-text">Cloud<span style="color: #60a5fa;">Domain</span></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#services">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#gallery">Gallery</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section (Home) - Modified -->
+    <section id="home" class="hero d-flex align-items-center text-center text-light">
+      <div class="container">
+        <h1>Hello, Welcome to Cloud Computing</h1>
+        <p>Your gateway to mastering modern cloud technologies and DevOps practices</p>
+        <a href="login.html" class="btn btn-primary btn-lg">LOGIN</a>
+      </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">About Our Cloud Domain</h2>
+        <p class="text-center">We are a cloud computing community focusing on AWS, Azure, GCP, and beyond...</p>
+        <ul>
+          <li>AWS Cloud Training</li>
+          <li>Azure and GCP Services</li>
+          <li>Cloud Infrastructure Setup</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5 bg-light">
+      <div class="container">
+        <h2 class="text-center mb-4">Our Services</h2>
+        <div class="row text-center">
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="cloudddd.png" class="card-img-top" alt="Cloud Computing Training">
+              <div class="card-body">
+                <h5 class="card-title">Cloud Computing Training</h5>
+                <p class="card-text">Learn how to use cloud platforms like AWS, Azure, and GCP through hands-on training.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="kodekloud.jpeg" class="card-img-top" alt="DevOps Solutions">
+              <div class="card-body">
+                <h5 class="card-title">DevOps Solutions</h5>
+                <p class="card-text">Implement continuous integration and continuous deployment practices using industry-leading tools.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="supportt.jpeg" class="card-img-top" alt="Consulting & Support">
+              <div class="card-body">
+                <h5 class="card-title">Consulting & Support</h5>
+                <p class="card-text">Get expert advice on optimizing your cloud infrastructure and development workflows.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Cloud Gallery</h2>
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="awsssssssss.jpeg" class="card-img-top" alt="Cloud Image 1">
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="azureee.jpeg" class="card-img-top" alt="Cloud Image 2">
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="shetech.jpeg" class="card-img-top" alt="Cloud Image 3">
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="challenges aws.jpeg" class="card-img-top" alt="Cloud Image 4">
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="sirr.jpeg" class="card-img-top" alt="Cloud Image 5">
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="community.jpeg" class="card-img-top" alt="Cloud Image 6">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="py-4" style="background-color: #1e3a8a;">
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col-md-6 text-center text-md-start">
+            <ul class="list-unstyled d-inline-flex mb-0">
+              <li><a href="#home" class="nav-link text-white">Home</a></li>
+              <li><a href="#about" class="nav-link text-white">About Us</a></li>
+              <li><a href="#services" class="nav-link text-white">Services</a></li>
+              <li><a href="#gallery" class="nav-link text-white">Gallery</a></li>
+            </ul>
+          </div>
+          <div class="col-md-6 text-center text-md-end">
+            <ul class="list-unstyled d-inline-flex mb-0">
+              <li><a href="https://www.linkedin.com/company/pep-cloud-computing-and-devops-centre" target="_blank" class="nav-link text-white">Visit Our LinkedIn Page</a></li>
+              <li><a href="login.html" class="nav-link text-white">Login</a></li>
+            </ul>
+          </div>
+        </div>
+        <p class="text-center mt-4 text-white">&copy; 2025 PEP Cloud Computing & DevOps Centre. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Admin Login Container -->
+  <div class="admin-container" id="adminContainer">
+    <div class="admin-login-form" id="adminLoginForm">
+      <h2>Admin Login</h2>
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="admin-form-group">
+          <label for="adminUsername">Username</label>
+          <input type="email" id="adminUsername" required>
+        </div>
+        <div class="admin-form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" required>
+        </div>
+        <button type="submit" class="admin-login-button">Login</button>
+      </form>
+      <button class="admin-back-button" onclick="showMainWebsite()">Back to Main Site</button>
+      <div id="adminErrorMessage" class="admin-error"></div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard">
+      <div class="admin-header">
+        <h2>Admin Dashboard</h2>
+        <button class="admin-logout-button" onclick="adminLogout()">Logout</button>
+      </div>
+      
+      <div class="cloud-concepts">
+        <div class="concept-card">
+          <h3>Infrastructure as a Service (IaaS)</h3>
+          <p>Fundamental cloud computing model providing virtualized computing resources over the internet.</p>
+          <ul class="concept-features">
+            <li>Virtual machines and servers</li>
+            <li>Storage and networking</li>
+            <li>Operating systems</li>
+            <li>Pay-as-you-use pricing</li>
+          </ul>
+        </div>
+
+        <div class="concept-card">
+          <h3>Platform as a Service (PaaS)</h3>
+          <p>Cloud platform providing development and deployment environment for applications.</p>
+          <ul class="concept-features">
+            <li>Development frameworks</li>
+            <li>Database management</li>
+            <li>Business analytics</li>
+            <li>Application hosting</li>
+          </ul>
+        </div>
+
+        <div class="concept-card">
+          <h3>Software as a Service (SaaS)</h3>
+          <p>Software distribution model where applications are hosted by a service provider.</p>
+          <ul class="concept-features">
+            <li>Web-based applications</li>
+            <li>Automatic updates</li>
+            <li>Accessibility from anywhere</li>
+            <li>Subscription-based pricing</li>
+          </ul>
+        </div>
+
+        <div class="concept-card">
+          <h3>Cloud Security</h3>
+          <p>Comprehensive security measures to protect cloud-based systems and data.</p>
+          <ul class="concept-features">
+            <li>Identity and access management</li>
+            <li>Data encryption</li>
+            <li>Network security</li>
+            <li>Compliance monitoring</li>
+          </ul>
+        </div>
+
+        <div class="concept-card">
+          <h3>Cloud Storage</h3>
+          <p>Remote storage service providing data storage and retrieval over the internet.</p>
+          <ul class="concept-features">
+            <li>Object storage</li>
+            <li>Block storage</li>
+            <li>File storage</li>
+            <li>Data backup and recovery</li>
+          </ul>
+        </div>
+
+        <div class="concept-card">
+          <h3>Cloud Migration</h3>
+          <p>Process of moving digital assets, services, and applications to cloud infrastructure.</p>
+          <ul class="concept-features">
+            <li>Assessment and planning</li>
+            <li>Data migration strategies</li>
+            <li>Application modernization</li>
+            <li>Performance optimization</li>
+          </ul>
+        </div>
+
+        <div class="concept-card">
+          <h3>DevOps in Cloud</h3>
+          <p>Integration of development and operations practices in cloud environments.</p>
+          <ul class="concept-features">
+            <li>Continuous integration/deployment</li>
+            <li>Infrastructure as code</li>
+            <li>Automated testing</li>
+            <li>Monitoring and logging</li>
+          </ul>
+        </div>
+
+        <div class="concept-card">
+          <h3>Multi-Cloud Strategy</h3>
+          <p>Using multiple cloud computing services from different providers.</p>
+          <ul class="concept-features">
+            <li>Vendor lock-in avoidance</li>
+            <li>Risk distribution</li>
+            <li>Cost optimization</li>
+            <li>Best-of-breed services</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Smooth Scroll JS (for scrolling effect) -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+
+  <!-- Admin System JavaScript -->
+  <script>
+    // Check URL on page load
+    window.addEventListener('load', function() {
+      checkAdminRoute();
+    });
+
+    // Handle URL changes
+    window.addEventListener('popstate', function(e) {
+      checkAdminRoute();
+    });
+
+    function checkAdminRoute() {
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+      const search = window.location.search;
+      
+      // Check for various ways to access admin
+      if (path.includes('/admin') || hash === '#admin' || search.includes('admin') || path.endsWith('admin')) {
+        showAdminLogin();
+      } else {
+        showMainWebsite();
+      }
+    }
+
+    function showMainWebsite() {
+      document.getElementById('main-website').style.display = 'block';
+      document.getElementById('adminContainer').style.display = 'none';
+      document.getElementById('adminLoginForm').style.display = 'block';
+      document.getElementById('adminDashboard').style.display = 'none';
+      
+      // Clear hash for main website
+      if (window.location.hash.includes('admin')) {
+        window.history.pushState({}, '', window.location.pathname);
+      }
+    }
+
+    function showAdminLogin() {
+      document.getElementById('main-website').style.display = 'none';
+      document.getElementById('adminContainer').style.display = 'block';
+      document.getElementById('adminLoginForm').style.display = 'block';
+      document.getElementById('adminDashboard').style.display = 'none';
+      
+      // For local development, use hash routing instead
+      if (!window.location.hash.includes('admin')) {
+        window.history.pushState({}, '', window.location.pathname + '#admin');
+      }
+    }
+
+    function showAdminDashboard() {
+      document.getElementById('main-website').style.display = 'none';
+      document.getElementById('adminContainer').style.display = 'block';
+      document.getElementById('adminLoginForm').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+    }
+
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('adminUsername').value;
+      const password = document.getElementById('adminPassword').value;
+      const errorMessage = document.getElementById('adminErrorMessage');
+      
+      // Clear previous error
+      errorMessage.textContent = '';
+      
+      // Check credentials
+      if (username === 'admin@gmail.com' && password === 'cloudhack123') {
+        showAdminDashboard();
+      } else {
+        errorMessage.textContent = 'Invalid credentials. Please try again.';
+        // Clear the password field
+        document.getElementById('adminPassword').value = '';
+      }
+    }
+
+    function adminLogout() {
+      // Clear form fields
+      document.getElementById('adminUsername').value = '';
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('adminErrorMessage').textContent = '';
+      
+      // Return to main website
+      showMainWebsite();
+    }
+
+    // Handle direct navigation to admin
+    if (window.location.hash === '#admin' || window.location.pathname.includes('admin') || window.location.search.includes('admin')) {
+      showAdminLogin();
+    }
+
+    // Add a simple way to access admin from console or URL
+    window.goToAdmin = function() {
+      showAdminLogin();
+    };
+  </script>
+
+</body>
+</html>
